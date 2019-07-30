@@ -1,0 +1,37 @@
+.circle {
+    background-color: white;
+    border-radius: 50%;
+    width: 85%;
+    height: 85%;
+    display: inline-block;
+    margin: 7.5% 0;
+}
+
+.square {
+    display: block;
+    margin: 0 auto;
+    width: calc(113vh/7);
+    height: calc(113vh/7);
+    /* vertical-align: middle; */
+    text-align: center;
+    background-color: navy;
+}
+
+.column-container {
+    display: table-cell;
+}
+
+.yellow {
+    /* background-color: goldenrod; */
+    background-color: rgb(230, 201, 42);
+}
+
+.red {
+    /* background-color: crimson; */
+    background-color: rgb(189, 15, 15);
+}
+
+.green {
+    background-color: forestgreen;
+}
+

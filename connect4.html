@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="connect4.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        document.body.innerHTML += "\n\n<!-- Code generated with JS -->\n\n";
+
+        let redPlayer = true;
+
+        // We need 7 columns and 6 rows.
+        for (var column = 1; column <= 7; column++) {
+            var idName = "col" + column;
+            var divColumn = document.createElement("div");
+            divColumn.setAttribute("id", idName);
+            divColumn.setAttribute("class", "column-container")
+            document.body.appendChild(divColumn);
+            document.getElementById(idName).innerHTML += "\n";
+
+            for (var row = 1; row <= 6; row++) {
+
+
+                var idSquare = "R" + row + "C" + column + "-square";
+                var divSquare = document.createElement("div");
+                divSquare.setAttribute("id", idSquare);
+                divSquare.setAttribute("class", "square");
+                document.getElementById(idName).appendChild(divSquare);
+                document.getElementById(idName).innerHTML += "\n";
+
+                var idCircle = "R" + row + "C" + column + "-circle";
+                var divCircle = document.createElement("div");
+                divCircle.setAttribute("class", "circle");
+                divCircle.setAttribute("id", idCircle);
+                document.getElementById(idSquare).appendChild(divCircle);
+
+            }
+
+            document.body.innerHTML += "\n\n";
+        }
+
+        console.log(document.body.innerHTML);
+
+
+
+        document.addEventListener("click", function (e) {
+            let clickedElementId = e.target.getAttribute("id");
+            console.log("***\nclicked on: " + clickedElementId);
+            let playedElementId;
+
+            for (let i = 6; i > 0; i--) {
+                let item = "R" + i + "C" + clickedElementId.substring(3, 4) + "-circle";
+
+                if (document.getElementById(item).classList.contains("yellow") || document.getElementById(item).classList.contains("red")) {
+                    continue;
+                } else {
+                    if (redPlayer) {
+                        document.getElementById(item).classList.add("red");
+                    } else {
+                        document.getElementById(item).classList.add("yellow");
+                    }
+                    redPlayer = !redPlayer;
+                    playedElementId = "R" + i + "C" + clickedElementId.substring(3, 4) + "-circle";
+                    break;
+                }
+
+            }
+            checkWinner(playedElementId);
+        })
+
+
+
+        function checkWinner(playedElementId) {
+            let col, row, minCol, maxCol, minRow, maxRow, color;
+            console.log("played on: " + playedElementId);
+
+            function calculateInitialMinimumAndMaximumValues() {
+                col = parseInt(playedElementId.substring(3, 4));
+                row = parseInt(playedElementId.substring(1, 2));
+                minCol = col - 3;
+                maxCol = col + 3;
+                minRow = row - 3;
+                maxRow = row + 3;
+                // console.log("Min & Max values before check: \ncol: " + col + ", min: " + minCol + ", max: " + maxCol +
+                //     "\nrow: " + row + ", min: " + minRow + ", max: " + maxRow);
+
+                if (minCol < 1) {
+                    minCol = 1;
+                }
+
+                if (maxCol > 7) {
+                    maxCol = 7;
+                }
+
+                if (minRow < 1) {
+                    minRow = 1
+                }
+
+                if (maxRow > 6) {
+                    maxRow = 6
+                }
+                console.log("Min & Max values after check: \ncol: " + col + ", min: " + minCol + ", max: " + maxCol +
+                    "\nrow: " + row + ", min: " + minRow + ", max: " + maxRow);
+
+                color;
+
+                // the value of redPlayer has already been changed.
+                // We want to find the player who just made a move, so we take the opposite value.
+                if (redPlayer == false) {
+                    color = "red";
+                } else {
+                    color = "yellow";
+                }
+
+            }
+
+            calculateInitialMinimumAndMaximumValues();
+
+            // Check row if there is winning match
+            for (let i = minCol; i <= maxCol; i++) {
+                // We must assure that every time no less than 4 consequent elements will be checked.
+                // That is why we perform the check if (maxCol - i) > 2.
+                if ((maxCol - i) > 2) {
+                    let item1 = document.getElementById(playedElementId.substring(0, 3) + i + playedElementId.substring(4)).classList.contains(color);
+                    let item2 = document.getElementById(playedElementId.substring(0, 3) + (i + 1) + playedElementId.substring(4)).classList.contains(color);
+                    let item3 = document.getElementById(playedElementId.substring(0, 3) + (i + 2) + playedElementId.substring(4)).classList.contains(color);
+                    let item4 = document.getElementById(playedElementId.substring(0, 3) + (i + 3) + playedElementId.substring(4)).classList.contains(color);
+
+                    if (item1 && item2 && item3 && item4 == true) {
+                        alert("We have winner");
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            // Check column if there is winning match
+            for (let i = minRow; i <= maxRow; i++) {
+                if ((maxRow - i) > 2) {
+                    let item1 = document.getElementById("R" + i + playedElementId.substring(2)).classList.contains(color);
+                    let item2 = document.getElementById("R" + (i + 1) + playedElementId.substring(2)).classList.contains(color);
+                    let item3 = document.getElementById("R" + (i + 2) + playedElementId.substring(2)).classList.contains(color);
+                    let item4 = document.getElementById("R" + (i + 3) + playedElementId.substring(2)).classList.contains(color);
+
+                    if (item1 && item2 && item3 && item4 == true) {
+                        alert("We have winner");
+                    }
+                } else {
+                    break;
+                }
+            }
+
+
+            // Check diagonal (direction from top left to bottom right) if there is winning match
+            if (col <= row) {
+                minRow = row - (col - minCol);
+                maxCol = col + (maxRow - row);
+                console.log("C<=R diagLR\nminCol: " + minCol + ", minRow: " + minRow +
+                    "\nmaxCol: " + maxCol + ", maxRow: " + maxRow +
+                    "\nR" + minRow + "C" + minCol + " => R" + maxRow + "C" + maxCol);
+            } else {
+                minCol = col - (row - minRow);
+                maxRow = row + (maxCol - col)
+
+                console.log("C>R diagLR\n\nminCol: " + minCol + ", minRow: " + minRow +
+                    "\nmaxCol: " + maxCol + ", maxRow: " + maxRow +
+                    "\nR" + minRow + "C" + minCol + " => R" + maxRow + "C" + maxCol);
+            }
+
+            let diagonalPieces = (maxRow - minRow) + 1;
+
+
+            console.log("minRow: " + minRow);
+            console.log("minCol: " + minCol);
+            for (let i = 0; i <= diagonalPieces; i++) {
+                if ((diagonalPieces - i) > 3) {
+
+                    item1 = document.getElementById("R" + (minRow + i) + "C" + (minCol + i) + "-circle").classList.contains(color);
+                    item2 = document.getElementById("R" + (minRow + i + 1) + "C" + (minCol + i + 1) + "-circle").classList.contains(color);
+                    item3 = document.getElementById("R" + (minRow + i + 2) + "C" + (minCol + i + 2) + "-circle").classList.contains(color);
+                    item4 = document.getElementById("R" + (minRow + i + 3) + "C" + (minCol + i + 3) + "-circle").classList.contains(color);
+
+                    if (item1 && item2 && item3 && item4 == true) {
+                        alert("We have winner");
+                    }
+                }
+            }
+    
+    
+    
+    
+    
+            // for (let i = 1; i <= diagonalPieces; i++) {
+            //     if ((diagonalPieces - i) > 2) {
+            //         item1 = document.getElementById("R" + minRow + "C" + minCol + "-circle").classList.contains(color);
+            //         item2 = document.getElementById("R" + (minRow + 1) + "C" + (minCol + 1) + "-circle").classList.contains(color);
+            //         item3 = document.getElementById("R" + (minRow + 2) + "C" + (minCol + 2) + "-circle").classList.contains(color);
+            //         item4 = document.getElementById("R" + (minRow + 3) + "C" + (minCol + 3) + "-circle").classList.contains(color);
+
+            //         if (item1 && item2 && item3 && item4 == true) {
+            //             console.log("We have winner");
+            //         }
+            //         minRow++;
+            //         minCol++;
+            //     }
+            // }
+
+
+            // Check diagonal (direction from top right to bottom left) if there is winning match
+            // Recalculate values because they have been altered.
+            calculateInitialMinimumAndMaximumValues();
+
+            if (col <= row) {
+                minCol = col - (maxRow - row);
+                if (minCol < 1) {
+                    minCol = 1
+                }
+
+            } else {
+                maxCol = col + (row - minRow);
+                if (maxCol > 7) {
+                    maxCol = 7;
+                }
+
+            }
+
+
+            // diagonalPieces refers to the total number of checkers that can be found on the diagonal
+            // that could be part of the winning combination. Only one can be found on each column.
+            // It is used to ensure that all combinations checked consist of no less than 4 checkers.
+            diagonalPieces = (maxCol - minCol) + 1;
+
+            for (let i = 0; i <= diagonalPieces; i++) {
+                if ((diagonalPieces - i) > 3) {
+                    item1 = (document.getElementById("R" + (minRow + i) + "C" + (maxCol - i) + "-circle").classList.contains(color));
+                    item2 = (document.getElementById("R" + (minRow + i + 1) + "C" + (maxCol - i - 1) + "-circle").classList.contains(color));
+                    item3 = (document.getElementById("R" + (minRow + i + 2) + "C" + (maxCol - i - 2) + "-circle").classList.contains(color));
+                    item4 = (document.getElementById("R" + (minRow + i + 3) + "C" + (maxCol - i - 3) + "-circle").classList.contains(color));
+                }
+            }
+            if (item1 && item2 && item3 && item4 == true) {
+                alert("We have winner");
+            }
+        }
+    </script>
+
+
+
+    <!-- <div class="column-container">
+            <div class="square"><div class="circle"></div></div>
+            <div class="square"><div class="circle"></div></div>
+            <div class="square"><div class="circle"></div></div>
+            <div class="square"><div class="circle"></div></div>
+    </div> -->
+
+
+
+
+</body>
+
+</html>
