@@ -15,6 +15,26 @@
         document.body.innerHTML += "\n\n<!-- Code generated with JS -->\n\n";
 
         let redPlayer = true;
+        
+
+        let divGame = document.createElement("div");
+        divGame.setAttribute("id", "game");
+        divGame.setAttribute("class", "column-container")
+        document.body.appendChild(divGame);
+        
+        
+        let divInfo = document.createElement("div");
+        divInfo.setAttribute("id", "info");
+        divInfo.setAttribute("class", "column-container")
+        document.body.appendChild(divInfo);
+        document.getElementById("game").innerHTML += "\n\n"
+        
+        let infoBox = document.createElement("div");
+        infoBox.setAttribute("id","infoBox");
+        infoBox.setAttribute("class", "information-box");
+        document.getElementById("info").appendChild(infoBox);
+        document.getElementById("infoBox").innerText = "Player Information";
+
 
         // We need 7 columns and 6 rows.
         for (var column = 1; column <= 7; column++) {
@@ -22,7 +42,8 @@
             var divColumn = document.createElement("div");
             divColumn.setAttribute("id", idName);
             divColumn.setAttribute("class", "column-container")
-            document.body.appendChild(divColumn);
+            document.getElementById("game").appendChild(divColumn);
+            // document.body.appendChild(divColumn);
             document.getElementById(idName).innerHTML += "\n";
 
             for (var row = 1; row <= 6; row++) {
