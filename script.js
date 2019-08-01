@@ -1,31 +1,76 @@
 document.body.innerHTML += "\n\n<!-- Code generated with JS -->\n\n";
 
+let player1;
+let player2;
+let color = "red";
+let name;
 
-let player1 = prompt("Please enter the name of player 1 (red):")
-let player2 = prompt("Please enter the name of player 2 (yellow):")
+
 
 let redPlayer = true;
 
-createStructure();
+
+function newPlayers() {
+    player1 = prompt("Please enter the name of player 1 (red):")
+    player2 = prompt("Please enter the name of player 2 (yellow):")
+}
+
+function changePlayer() {
+    // document.getElementById("currentColor").classList.add("circle");
+    document.getElementById("currentColor").classList.remove(color);
+    redPlayer = !redPlayer;
+    color = redPlayer ? "red" : "yellow";
+    document.getElementById("currentColor").classList.add(color);
+    name = redPlayer ? player1 : player2;
+    document.getElementById("playerName").innerText = name;
+}
+
 
 function createStructure() {
-    let divGame = document.createElement("div");
-    divGame.setAttribute("id", "game");
-    divGame.setAttribute("class", "column-container")
-    document.body.appendChild(divGame);
 
+    // the left div that contains the board of the game.
+    let newElement = document.createElement("div");
+    newElement.setAttribute("id", "game");
+    newElement.setAttribute("class", "column-container")
+    document.body.appendChild(newElement);
 
-    let divInfo = document.createElement("div");
-    divInfo.setAttribute("id", "info");
-    divInfo.setAttribute("class", "column-container")
-    document.body.appendChild(divInfo);
+    // the right div that wll contain the information section
+    newElement = document.createElement("div");
+    newElement.setAttribute("id", "info");
+    newElement.setAttribute("class", "column-container")
+    document.body.appendChild(newElement);
     document.getElementById("game").innerHTML += "\n\n"
 
-    let infoBox = document.createElement("div");
-    infoBox.setAttribute("id", "infoBox");
-    infoBox.setAttribute("class", "information-box");
-    document.getElementById("info").appendChild(infoBox);
-    document.getElementById("infoBox").innerText = "Player Information";
+    // the info box
+    newElement = document.createElement("div");
+    newElement.setAttribute("id", "infoBox");
+    newElement.setAttribute("class", "information-box");
+    document.getElementById("info").appendChild(newElement);
+    document.getElementById("infoBox").innerText = "Currently Playing";
+
+    // square placeholder around circle
+    newElement = document.createElement("div");
+    newElement.setAttribute("id", "colorPlacement");
+    newElement.setAttribute("class", "square white placeholder-size");
+    document.getElementById("infoBox").appendChild(newElement);
+
+    // circle is the actual element that shows the current color.
+    newElement = document.createElement("div");
+    newElement.setAttribute("id", "currentColor");
+    document.getElementById("colorPlacement").appendChild(newElement);
+    document.getElementById("currentColor").classList.add("circle");
+    document.getElementById("currentColor").classList.add(color);
+    document.getElementById("currentColor").classList.add("smaller-size");
+
+    newElement = document.createElement("p");
+    newElement.setAttribute("id", "playerName");
+    newElement.setAttribute("class", "test");
+
+    // newElement.innerText = player1;
+    newElement.innerText = player1;
+    document.getElementById("infoBox").appendChild(newElement);
+
+
 
 
     // We need 7 columns and 6 rows.
@@ -44,13 +89,13 @@ function createStructure() {
             var idSquare = "R" + row + "C" + column + "-square";
             var divSquare = document.createElement("div");
             divSquare.setAttribute("id", idSquare);
-            divSquare.setAttribute("class", "square");
+            divSquare.setAttribute("class", "square navy game-block-size");
             document.getElementById(idName).appendChild(divSquare);
             document.getElementById(idName).innerHTML += "\n";
 
             var idCircle = "R" + row + "C" + column + "-circle";
             var divCircle = document.createElement("div");
-            divCircle.setAttribute("class", "circle");
+            divCircle.setAttribute("class", "circle white");
             divCircle.setAttribute("id", idCircle);
             document.getElementById(idSquare).appendChild(divCircle);
 
@@ -62,6 +107,8 @@ function createStructure() {
     // console.log(document.body.innerHTML);
 }
 
+newPlayers();
+createStructure();
 
 document.addEventListener("click", function (e) {
     let clickedElementId = e.target.getAttribute("id");
@@ -80,19 +127,20 @@ document.addEventListener("click", function (e) {
             } else {
                 document.getElementById(item).classList.add("yellow");
             }
-            redPlayer = !redPlayer;
             playedElementId = "R" + i + "C" + clickedElementId.substring(3, 4) + "-circle";
             break;
         }
 
     }
     checkWinner(playedElementId);
+    changePlayer();
+
 })
 
 
 
 function checkWinner(playedElementId) {
-    let col, row, minCol, maxCol, minRow, maxRow, color;
+    let col, row, minCol, maxCol, minRow, maxRow;
     console.log("played on: " + playedElementId);
 
     function calculateInitialMinimumAndMaximumValues() {
@@ -123,16 +171,6 @@ function checkWinner(playedElementId) {
         console.log("Min & Max values after check: \ncol: " + col + ", min: " + minCol + ", max: " + maxCol +
             "\nrow: " + row + ", min: " + minRow + ", max: " + maxRow);
 
-        color;
-
-        // the value of redPlayer has already been changed.
-        // We want to find the player who just made a move, so we take the opposite value.
-        if (redPlayer == false) {
-            color = "red";
-        } else {
-            color = "yellow";
-        }
-
     }
 
     calculateInitialMinimumAndMaximumValues();
@@ -153,7 +191,7 @@ function checkWinner(playedElementId) {
                 let item4 = document.getElementById(playedElementId.substring(0, 3) + (i + 3) + playedElementId.substring(4)).classList.contains(color);
 
                 if (item1 && item2 && item3 && item4 == true) {
-                    alert("We have winner");
+                    alert(name + " is the winner!");
                 }
             } else {
                 break;
@@ -171,7 +209,7 @@ function checkWinner(playedElementId) {
                 let item4 = document.getElementById("R" + (i + 3) + playedElementId.substring(2)).classList.contains(color);
 
                 if (item1 && item2 && item3 && item4 == true) {
-                    alert("We have winner");
+                    alert(name + " is the winner!");
                 }
             } else {
                 break;
@@ -222,7 +260,7 @@ function checkWinner(playedElementId) {
                 console.log(item1 + " " + item2 + " " + item3 + " " + item4);
 
                 if (item1 && item2 && item3 && item4 == true) {
-                    alert("We have winner");
+                    alert(name + " is the winner!");
                 }
             }
         }
@@ -266,7 +304,7 @@ function checkWinner(playedElementId) {
                 console.log("R" + (minRow + i + 3) + "C" + (maxCol - i - 3) + "-circle");
                 console.log(item1 + " " + item2 + " " + item3 + " " + item4);
                 if (item1 && item2 && item3 && item4 === true) {
-                    alert("We have winner");
+                    alert(name + " is the winner!");
                 }
             }
         }
