@@ -51,7 +51,7 @@ function createStructure() {
     // square placeholder around circle
     newElement = document.createElement("div");
     newElement.setAttribute("id", "colorPlacement");
-    newElement.setAttribute("class", "square white placeholder-size");
+    newElement.setAttribute("class", "square white color-legend-placeholder");
     document.getElementById("infoBox").appendChild(newElement);
 
     // circle is the actual element that shows the current color.
@@ -60,7 +60,7 @@ function createStructure() {
     document.getElementById("colorPlacement").appendChild(newElement);
     document.getElementById("currentColor").classList.add("circle");
     document.getElementById("currentColor").classList.add(color);
-    document.getElementById("currentColor").classList.add("smaller-size");
+    document.getElementById("currentColor").classList.add("color-legend");
 
     newElement = document.createElement("p");
     newElement.setAttribute("id", "playerName");
@@ -104,7 +104,7 @@ function createStructure() {
         document.body.innerHTML += "\n\n";
     }
 
-    // console.log(document.body.innerHTML);
+    console.log(document.body.innerHTML);
 }
 
 newPlayers();
