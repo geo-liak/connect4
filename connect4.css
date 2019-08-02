@@ -15,13 +15,13 @@ body {
     height: calc(110vh/7);
 }
 
-.smaller-size {
+.color-legend {
     width: 90%;
     height: 90%;
     margin: 5%;
 }
 
-.placeholder-size {
+.color-legend-placeholder {
     width: calc(70vh/7);
     height: calc(70vh/7);
 }
@@ -30,23 +30,47 @@ body {
     float: left;
 }
 
+.float-right {
+    float: right;
+}
+
 .square {
     display: block;
-    /* margin: 0 auto; */
-    /* vertical-align: middle; */
     text-align: center;
     background-color: navy;
 }
 
-.test {
+.block {
     display: block;
-    position: absolute;
 }
 
+.relative {
+    position: relative;
+}
 
-/* .display {
-    display: table-row;
-} */
+.inline {
+    display: inline;
+}
+
+.name-size {
+    width: 75%;
+
+}
+.talbe {
+    display: table;
+}
+
+.table-cell {
+    display: table-cell;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
 
 .column-container {
     display: table-cell;
